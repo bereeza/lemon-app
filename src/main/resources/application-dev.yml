@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: lemon-app
+
+mqtt:
+  broker-uri: tcp://${IP}:1883
+  topics:
+    sensor:
+      data: esp32/dht/sensor/data
+  client-id: ${CLIENT_ID}
+  qos: ${QOS:1}
+
+gcp:
+  project-id: ${GCP_PROJECT_ID}
+  instance-id: ${GCP_INSTANCE_ID}
+  table-id: ${GCP_TABLE_ID}
+  column-family-temp: ${GCP_COLUMN_FAMILY}
+  column-family-hum: ${GCP_COLUMN_FAMILY}
+  admin:
+    credentials:
+      path: ${GCP_ADMIN_CREDENTIALS_PATH}
