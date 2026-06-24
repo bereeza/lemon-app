@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: lemon-app
+
+mqtt:
+  broker-uri: tcp://${IP}:1883
+  topics:
+    sensor:
+      data: esp32/dht/sensor/data
+  client-id: ${CLIENT_ID:lemon-app-client}
+  qos: ${QOS:1}
+
+gcp:
+  project-id: ${GCP_PROJECT_ID:lemon-app}
+  instance-id: ${GCP_INSTANCE_ID:lemon-table}
+  table-id: ${GCP_TABLE_ID:dht-sensor}
+  column-family-temp: ${GCP_COLUMN_FAMILY:temp_c}
+  column-family-hum: ${GCP_COLUMN_FAMILY:hum}
+
+sliding-window:
+  window-size: ${SLIDING_WINDOW_SIZE:10}
+  sigma: ${SLIDING_WINDOW_SIGMA:2.0}
+  min-bounds: ${SLIDING_WINDOW_MIN_BOUNDS:1.0}
