@@ -46,8 +46,10 @@ public class MqttMessageHandler implements MessageHandler {
             SensorData sensorData = objectMapper.readValue(message.getPayload().toString(), SensorData.class);
             UUID uuid = message.getHeaders().get("id", UUID.class);
             Long timestamp = message.getHeaders().get("timestamp", Long.class);
+            sensorData.setId(uuid);
+            sensorData.setCreatedAt(timestamp);
 
-            sensorDataService.process(sensorData, uuid, timestamp);
+            sensorDataService.process(sensorData);
         } catch (JsonProcessingException e) {
             logger.error("Failed to process message from topic '{}': {}", topic, message.getPayload());
             throw new SensorDataParseException(
