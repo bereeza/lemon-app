@@ -56,7 +56,7 @@ class MqttMessageHandlerIntegrationTest {
         mqttMessageHandler.handleMessage(message);
 
         verify(sensorDataService, times(1))
-                .process(any(SensorData.class), any(UUID.class), any(Long.class));
+                .process(any(SensorData.class));
     }
 
     @Test
@@ -80,6 +80,6 @@ class MqttMessageHandlerIntegrationTest {
 
         // wrong topic should not be processed
         verify(sensorDataService, never())
-                .process(any(SensorData.class), any(UUID.class), any(Long.class));
+                .process(any(SensorData.class));
     }
 }

@@ -11,11 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.UUID;
-
-import static com.lemon.app.model.SensorConstants.HUMIDITY;
-import static com.lemon.app.model.SensorConstants.TEMPERATURE_C;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -30,13 +26,13 @@ class DHT11SensorDataClientTest {
     @Mock
     private BigTableDataProperties bigTableDataProperties;
 
-    private DHT11SensorDataClient client;
+    private DHT11SensorDataClient sensorDataClient;
 
     private static final String TABLE_ID = "test-table";
 
     @BeforeEach
     void setUp() {
-        client = new DHT11SensorDataClient(dataClient, bigTableDataProperties);
+        sensorDataClient = new DHT11SensorDataClient(dataClient, bigTableDataProperties);
     }
 
     @Test
@@ -61,11 +57,9 @@ class DHT11SensorDataClientTest {
     @DisplayName("Should save sensor data to BigTable successfully.")
     void shouldSaveSensorDataToBigtableSuccessfullyTest() {
         when(bigTableDataProperties.getTableId()).thenReturn(TABLE_ID);
-        when(bigTableDataProperties.getColumnFamilyTempC()).thenReturn(TEMPERATURE_C.getValue());
-        when(bigTableDataProperties.getColumnFamilyHum()).thenReturn(HUMIDITY.getValue());
 
-        SensorData sensorData = new SensorData(25.5, 60.0);
-        client.save(sensorData, UUID.randomUUID(), System.currentTimeMillis());
+        SensorData sensorData = new SensorData(UUID.randomUUID(), 25.5, 60.0, null, System.currentTimeMillis());
+        sensorDataClient.save(sensorData);
         ArgumentCaptor<RowMutation> mutationCaptor = ArgumentCaptor.forClass(RowMutation.class);
         verify(dataClient, times(1)).mutateRow(mutationCaptor.capture());
         RowMutation capturedMutation = mutationCaptor.getValue();
@@ -76,11 +70,9 @@ class DHT11SensorDataClientTest {
     @DisplayName("Should call mutateRow with correct parameters.")
     void shouldCallMutateRowWithCorrectParametersTest() {
         when(bigTableDataProperties.getTableId()).thenReturn(TABLE_ID);
-        when(bigTableDataProperties.getColumnFamilyTempC()).thenReturn(TEMPERATURE_C.getValue());
-        when(bigTableDataProperties.getColumnFamilyHum()).thenReturn(HUMIDITY.getValue());
 
-        SensorData sensorData = new SensorData(25.5, 60.0);
-        client.save(sensorData, UUID.randomUUID(), System.currentTimeMillis());
+        SensorData sensorData = new SensorData(UUID.randomUUID(), 25.5, 60.0, null, System.currentTimeMillis());
+        sensorDataClient.save(sensorData);
         verify(dataClient, times(1)).mutateRow(any(RowMutation.class));
     }
 }

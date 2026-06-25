@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.UUID;
 
 @Service
 public class SensorDataService implements DataService<SensorData> {
@@ -29,7 +28,7 @@ public class SensorDataService implements DataService<SensorData> {
     }
 
     @Override
-    public void process(SensorData data, UUID id, long timestamp) throws NumberFormatException {
+    public void process(SensorData data) throws NumberFormatException {
         try {
             boolean temperatureAnomaly = temperatureDetector.isAnomaly(data.getTemperature());
             boolean humidityAnomaly = humidityDetector.isAnomaly(data.getHumidity());
@@ -42,8 +41,9 @@ public class SensorDataService implements DataService<SensorData> {
                 // TODO: send notification
             }
 
-            dht11SensorDataClient.save(data, id, timestamp);
-            logger.info("UUID: {}; t: {}; humidity: {}; timestamp: {};", id, data.getTemperature(), data.getHumidity(), timestamp);
+            dht11SensorDataClient.save(data);
+            logger.info("UUID: {}; t: {}; humidity: {}; timestamp: {};",
+                    data.getId(), data.getTemperature(), data.getHumidity(), data.getCreatedAt());
         } catch (NumberFormatException e) {
             logger.error("Invalid format of data: {}", e.getMessage());
         }
