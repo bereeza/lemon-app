@@ -22,7 +22,7 @@ public class MqttMessageHandler implements MessageHandler {
     private static final Logger logger = LoggerFactory.getLogger(MqttMessageHandler.class);
     private static final String MQTT_RECEIVED_TOPIC = "mqtt_receivedTopic";
 
-    @Value("${mqtt.topics.sensor.data}")
+    @Value("${mqtt.topic-sensor-data}")
     private String dataTopic;
 
     private final ObjectMapper objectMapper;

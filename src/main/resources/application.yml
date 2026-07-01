@@ -2,11 +2,16 @@ spring:
   application:
     name: lemon-app
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, prometheus
+
 mqtt:
   broker-uri: tcp://${IP}:1883
-  topics:
-    sensor:
-      data: esp32/dht/sensor/data
+  topic-sensor-data: esp32/dht/sensor/data
+  topic-sensor-anomalies: esp32/dht/sensor/anomalies
   client-id: ${CLIENT_ID:lemon-app-client}
   qos: ${QOS:1}
 
@@ -14,7 +19,7 @@ gcp:
   project-id: ${GCP_PROJECT_ID:lemon-app}
   instance-id: ${GCP_INSTANCE_ID:lemon-table}
   table-id: ${GCP_TABLE_ID:dht-sensor}
-  column-family-temp: ${GCP_COLUMN_FAMILY:temp_c}
+  column-family-temp-c: ${GCP_COLUMN_FAMILY:temp_c}
   column-family-hum: ${GCP_COLUMN_FAMILY:hum}
 
 sliding-window:
