@@ -11,7 +11,8 @@ public class MqttBrokerProperties {
 
     private String brokerUri;
     private String clientId;
-    private String topicsSensorData;
+    private String topicSensorData;
+    private String topicSensorAnomalies;
     private int qos;
 
     public MqttBrokerProperties() {
@@ -20,12 +21,14 @@ public class MqttBrokerProperties {
     public MqttBrokerProperties(
             String brokerUri,
             String clientId,
-            String topicsSensorData,
+            String topicSensorData,
+            String topicSensorAnomalies,
             int qos
     ) {
         this.brokerUri = Objects.requireNonNull(brokerUri, "Broker URI cannot be null.");
         this.clientId = Objects.requireNonNull(clientId, "Client ID cannot be null.");
-        this.topicsSensorData = Objects.requireNonNull(topicsSensorData, "Topics sensor data cannot be null.");
+        this.topicSensorData = Objects.requireNonNull(topicSensorData, "Topics sensor data cannot be null.");
+        this.topicSensorAnomalies = Objects.requireNonNull(topicSensorAnomalies, "Topic sensor anomalies cannot be null.");
         this.qos = qos;
     }
 
@@ -45,12 +48,12 @@ public class MqttBrokerProperties {
         this.clientId = clientId;
     }
 
-    public String getTopicsSensorData() {
-        return topicsSensorData;
+    public String getTopicSensorData() {
+        return topicSensorData;
     }
 
-    public void setTopicsSensorData(String topicsSensorData) {
-        this.topicsSensorData = topicsSensorData;
+    public void setTopicSensorData(String topicSensorData) {
+        this.topicSensorData = topicSensorData;
     }
 
     public int getQos() {
@@ -59,5 +62,13 @@ public class MqttBrokerProperties {
 
     public void setQos(int qos) {
         this.qos = qos;
+    }
+
+    public String getTopicSensorAnomalies() {
+        return topicSensorAnomalies;
+    }
+
+    public void setTopicSensorAnomalies(String topicSensorAnomalies) {
+        this.topicSensorAnomalies = topicSensorAnomalies;
     }
 }

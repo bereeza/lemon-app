@@ -1,6 +1,5 @@
 package com.lemon.app.config.mqtt;
 
-import com.lemon.app.exception.MqttErrorHandler;
 import com.lemon.app.properties.MqttBrokerProperties;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +10,7 @@ import org.springframework.integration.core.MessageProducer;
 import org.springframework.integration.mqtt.core.DefaultMqttPahoClientFactory;
 import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
+import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
@@ -66,13 +66,26 @@ public class MqttConfig {
     }
 
     @Bean
-    @ServiceActivator(inputChannel = "mqttErrorChannel")
-    MessageHandler errorHandler(MqttErrorHandler errorHandler) {
-        return errorHandler;
+    MessageChannel mqttErrorChannel() {
+        return new DirectChannel();
     }
 
     @Bean
-    MessageChannel mqttErrorChannel() {
+    @ServiceActivator(inputChannel = "mqttAnomalyOutputChannel")
+    MessageHandler mqttAnomalyPublisher() {
+        MqttPahoMessageHandler handler = new MqttPahoMessageHandler(
+                mqttBrokerProperties.getClientId() + "-anomaly-pub",
+                mqttClientFactory()
+        );
+
+        handler.setAsync(true);
+        handler.setDefaultTopic(mqttBrokerProperties.getTopicSensorAnomalies());
+        handler.setConverter(new DefaultPahoMessageConverter());
+        return handler;
+    }
+
+    @Bean
+    MessageChannel mqttAnomalyOutputChannel() {
         return new DirectChannel();
     }
 }
