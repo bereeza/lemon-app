@@ -28,11 +28,15 @@ class DHT11SensorDataClientTest {
 
     private DHT11SensorDataClient sensorDataClient;
 
-    private static final String TABLE_ID = "test-table";
-
     @BeforeEach
     void setUp() {
         sensorDataClient = new DHT11SensorDataClient(dataClient, bigTableDataProperties);
+    }
+
+    private void mockProperties() {
+        when(bigTableDataProperties.getTableId()).thenReturn("test-table");
+        when(bigTableDataProperties.getColumnFamilyTempC()).thenReturn("temp_c");
+        when(bigTableDataProperties.getColumnFamilyHum()).thenReturn("hum");
     }
 
     @Test
@@ -56,7 +60,7 @@ class DHT11SensorDataClientTest {
     @Test
     @DisplayName("Should save sensor data to BigTable successfully.")
     void shouldSaveSensorDataToBigtableSuccessfullyTest() {
-        when(bigTableDataProperties.getTableId()).thenReturn(TABLE_ID);
+        mockProperties();
 
         SensorData sensorData = new SensorData(UUID.randomUUID(), 25.5, 60.0, null, System.currentTimeMillis());
         sensorDataClient.save(sensorData);
@@ -69,7 +73,7 @@ class DHT11SensorDataClientTest {
     @Test
     @DisplayName("Should call mutateRow with correct parameters.")
     void shouldCallMutateRowWithCorrectParametersTest() {
-        when(bigTableDataProperties.getTableId()).thenReturn(TABLE_ID);
+        mockProperties();
 
         SensorData sensorData = new SensorData(UUID.randomUUID(), 25.5, 60.0, null, System.currentTimeMillis());
         sensorDataClient.save(sensorData);
