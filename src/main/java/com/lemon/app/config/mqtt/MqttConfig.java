@@ -2,6 +2,8 @@ package com.lemon.app.config.mqtt;
 
 import com.lemon.app.properties.MqttBrokerProperties;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -21,6 +23,7 @@ import java.util.Objects;
 
 @Configuration
 public class MqttConfig {
+    private static final Logger logger = LoggerFactory.getLogger(MqttConfig.class);
     private final MqttBrokerProperties mqttBrokerProperties;
 
     public MqttConfig(MqttBrokerProperties mqttBrokerProperties) {
@@ -43,7 +46,7 @@ public class MqttConfig {
         MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(
                 mqttBrokerProperties.getClientId() + "-" + System.currentTimeMillis(),
                 mqttClientFactory(),
-                mqttBrokerProperties.getBrokerUri()
+                mqttBrokerProperties.getTopicSensorData()
         );
 
         adapter.setCompletionTimeout(5000);
@@ -68,6 +71,12 @@ public class MqttConfig {
     @Bean
     MessageChannel mqttErrorChannel() {
         return new DirectChannel();
+    }
+
+    @Bean
+    @ServiceActivator(inputChannel = "mqttErrorChannel")
+    MessageHandler errorHandler() {
+        return message -> logger.error("MQTT Error: {}", message);
     }
 
     @Bean
