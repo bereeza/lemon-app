@@ -1,14 +1,10 @@
 package com.lemon.app.model;
 
-import jakarta.validation.constraints.NotNull;
-
 import java.util.UUID;
 
 public class Data {
-    @NotNull
     private UUID id;
 
-    @NotNull
     private long createdAt;
 
     private long updatedAt;

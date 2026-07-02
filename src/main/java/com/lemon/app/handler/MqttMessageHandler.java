@@ -3,10 +3,12 @@ package com.lemon.app.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lemon.app.exception.SensorDataParseException;
+import com.lemon.app.model.Data;
 import com.lemon.app.model.SensorData;
 import com.lemon.app.service.SensorDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
@@ -17,6 +19,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
+@RegisterReflectionForBinding(classes = {SensorData.class, Data.class})
 public class MqttMessageHandler implements MessageHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(MqttMessageHandler.class);
@@ -39,6 +42,7 @@ public class MqttMessageHandler implements MessageHandler {
     public void handleMessage(Message<?> message) throws MessagingException {
         String topic = message.getHeaders().get(MQTT_RECEIVED_TOPIC, String.class);
         if (!Objects.equals(dataTopic, topic)) {
+            logger.warn("Topic mismatch. Expected: {}, Got: {}", dataTopic, topic);
             return;
         }
 

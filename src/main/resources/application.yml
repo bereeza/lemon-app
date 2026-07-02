@@ -21,6 +21,7 @@ gcp:
   table-id: ${GCP_TABLE_ID:dht-sensor}
   column-family-temp-c: ${GCP_COLUMN_FAMILY:temp_c}
   column-family-hum: ${GCP_COLUMN_FAMILY:hum}
+  admin-credentials-path: ${GCP_ADMIN_CREDENTIALS_PATH:}
 
 sliding-window:
   window-size: ${SLIDING_WINDOW_SIZE:10}

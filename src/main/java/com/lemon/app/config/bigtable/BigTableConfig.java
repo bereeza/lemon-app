@@ -9,7 +9,6 @@ import com.google.cloud.bigtable.admin.v2.BigtableTableAdminSettings;
 import com.google.cloud.bigtable.data.v2.BigtableDataClient;
 import com.google.cloud.bigtable.data.v2.BigtableDataSettings;
 import com.lemon.app.properties.BigTableDataProperties;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -21,9 +20,6 @@ import java.util.Objects;
 public class BigTableConfig {
 
     private final BigTableDataProperties bigTableDataProperties;
-
-    @Value(value = "${gcp.admin.credentials.path:}")
-    private String adminCredentialsPath;
 
     public BigTableConfig(
             BigTableDataProperties bigTableDataProperties
@@ -61,7 +57,8 @@ public class BigTableConfig {
 
     @Bean
     CredentialsProvider fixedCredentialsProvider() throws IOException {
-        if (adminCredentialsPath == null || adminCredentialsPath.isBlank()) {
+        String adminCredentialsPath = bigTableDataProperties.getAdminCredentialsPath();
+        if (Objects.isNull(adminCredentialsPath) || adminCredentialsPath.isBlank()) {
             return NoCredentialsProvider.create();
         }
 

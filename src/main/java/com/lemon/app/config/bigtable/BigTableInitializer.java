@@ -29,11 +29,15 @@ public class BigTableInitializer {
 
     @PostConstruct
     public void initTable() {
-        if (!adminClient.exists(bigTableDataProperties.getTableId())) {
-            logger.info("Table {} does not exist. Creating...", bigTableDataProperties.getTableId());
-            createTable();
-        } else {
-            logger.warn("Table {} already exists.", bigTableDataProperties.getTableId());
+        try {
+            if (!adminClient.exists(bigTableDataProperties.getTableId())) {
+                logger.info("Table {} does not exist. Creating...", bigTableDataProperties.getTableId());
+                createTable();
+            } else {
+                logger.info("Table {} already exists.", bigTableDataProperties.getTableId());
+            }
+        } catch (Exception e) {
+            logger.debug("BigTable initialization error.", e);
         }
     }
 

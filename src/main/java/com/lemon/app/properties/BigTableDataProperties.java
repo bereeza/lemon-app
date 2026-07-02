@@ -14,6 +14,7 @@ public class BigTableDataProperties {
     private String tableId;
     private String columnFamilyTempC;
     private String columnFamilyHum;
+    private String adminCredentialsPath;
 
     public BigTableDataProperties() {
     }
@@ -23,13 +24,15 @@ public class BigTableDataProperties {
             String instanceId,
             String tableId,
             String columnFamilyTempC,
-            String columnFamilyHum
+            String columnFamilyHum,
+            String adminCredentialsPath
     ) {
         this.projectId = projectId;
         this.instanceId = instanceId;
         this.tableId = tableId;
         this.columnFamilyTempC = columnFamilyTempC;
         this.columnFamilyHum = columnFamilyHum;
+        this.adminCredentialsPath = adminCredentialsPath;
     }
 
     public String getProjectId() {
@@ -70,5 +73,13 @@ public class BigTableDataProperties {
 
     public void setColumnFamilyHum(String columnFamilyHum) {
         this.columnFamilyHum = columnFamilyHum;
+    }
+
+    public String getAdminCredentialsPath() {
+        return adminCredentialsPath;
+    }
+
+    public void setAdminCredentialsPath(String adminCredentialsPath) {
+        this.adminCredentialsPath = adminCredentialsPath;
     }
 }
