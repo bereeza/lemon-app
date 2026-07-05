@@ -2,6 +2,7 @@ package com.lemon.app.client;
 
 import com.google.cloud.bigtable.data.v2.BigtableDataClient;
 import com.google.cloud.bigtable.data.v2.models.RowMutation;
+import com.google.cloud.bigtable.data.v2.models.TableId;
 import com.lemon.app.model.SensorData;
 import com.lemon.app.properties.BigTableDataProperties;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class DHT11SensorDataClient {
 
             String causeOfAnomaly = Objects.isNull(data.getCauseOfAnomaly()) ? "" : data.getCauseOfAnomaly();
 
-            RowMutation mutation = RowMutation.create(bigTableDataProperties.getTableId(), rowKey)
+            RowMutation mutation = RowMutation.create(TableId.of(bigTableDataProperties.getTableId()), rowKey)
                     .setCell(bigTableDataProperties.getColumnFamilyTempC(), ID.getValue(), String.valueOf(data.getId()))
                     .setCell(bigTableDataProperties.getColumnFamilyTempC(), TEMPERATURE_C.getValue(), String.valueOf(data.getTemperature()))
                     .setCell(bigTableDataProperties.getColumnFamilyHum(), HUMIDITY.getValue(), String.valueOf(data.getHumidity()))

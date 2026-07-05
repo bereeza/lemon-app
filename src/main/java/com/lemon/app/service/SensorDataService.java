@@ -53,7 +53,7 @@ public class SensorDataService implements DataService<SensorData> {
                 hasAnomaly = true;
             }
 
-            if (humidityAnomaly) {
+            if (humidityAnomaly || data.getHumidity() < 0) {
                 data.setCauseOfAnomaly(HUMIDITY_ANOMALY + data.getHumidity());
                 hasAnomaly = true;
             }
