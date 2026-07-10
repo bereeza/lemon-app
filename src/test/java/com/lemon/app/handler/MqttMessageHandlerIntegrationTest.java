@@ -2,7 +2,7 @@ package com.lemon.app.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lemon.app.model.SensorData;
-import com.lemon.app.service.SensorDataService;
+import com.lemon.app.service.SensorDataServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,13 +23,13 @@ class MqttMessageHandlerIntegrationTest {
 
     private MqttMessageHandler mqttMessageHandler;
     private ObjectMapper objectMapper;
-    private SensorDataService sensorDataService;
+    private SensorDataServiceImpl sensorDataServiceImpl;
 
     @BeforeEach
     void setUp() throws Exception {
         objectMapper = new ObjectMapper();
-        sensorDataService = mock(SensorDataService.class);
-        mqttMessageHandler = new MqttMessageHandler(objectMapper, sensorDataService);
+        sensorDataServiceImpl = mock(SensorDataServiceImpl.class);
+        mqttMessageHandler = new MqttMessageHandler(objectMapper, sensorDataServiceImpl);
 
         Field dataTopicField = MqttMessageHandler.class.getDeclaredField("dataTopic");
         dataTopicField.setAccessible(true);
@@ -55,7 +55,7 @@ class MqttMessageHandlerIntegrationTest {
 
         mqttMessageHandler.handleMessage(message);
 
-        verify(sensorDataService, times(1))
+        verify(sensorDataServiceImpl, times(1))
                 .process(any(SensorData.class));
     }
 
@@ -79,7 +79,7 @@ class MqttMessageHandlerIntegrationTest {
         mqttMessageHandler.handleMessage(message);
 
         // wrong topic should not be processed
-        verify(sensorDataService, never())
+        verify(sensorDataServiceImpl, never())
                 .process(any(SensorData.class));
     }
 }
