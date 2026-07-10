@@ -1,11 +1,23 @@
 package com.lemon.app.model;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+
 import java.util.UUID;
+
+import static com.lemon.app.model.MessageConstants.INCORRECT_HUM;
+import static com.lemon.app.model.MessageConstants.INCORRECT_TEMP;
 
 public class SensorData extends Data {
 
+    @Min(value = -50, message = INCORRECT_TEMP)
+    @Max(value = 50, message = INCORRECT_TEMP)
     private double temperature;
+    
+    @Min(value = 0, message = INCORRECT_HUM)
+    @Max(value = 100, message = INCORRECT_HUM)
     private double humidity;
+
     private String causeOfAnomaly;
 
     public SensorData() {

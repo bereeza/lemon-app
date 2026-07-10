@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lemon.app.exception.SensorDataParseException;
 import com.lemon.app.model.Data;
 import com.lemon.app.model.SensorData;
-import com.lemon.app.service.SensorDataService;
+import com.lemon.app.service.SensorDataServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
@@ -29,13 +29,13 @@ public class MqttMessageHandler implements MessageHandler {
     private String dataTopic;
 
     private final ObjectMapper objectMapper;
-    private final SensorDataService sensorDataService;
+    private final SensorDataServiceImpl sensorDataServiceImpl;
 
     public MqttMessageHandler(
             ObjectMapper objectMapper,
-            SensorDataService sensorDataService) {
+            SensorDataServiceImpl sensorDataServiceImpl) {
         this.objectMapper = Objects.requireNonNull(objectMapper, "ObjectMapper cannot be null.");
-        this.sensorDataService = Objects.requireNonNull(sensorDataService, "SensorDataService cannot be null.");
+        this.sensorDataServiceImpl = Objects.requireNonNull(sensorDataServiceImpl, "SensorDataService cannot be null.");
     }
 
     @Override
@@ -53,7 +53,7 @@ public class MqttMessageHandler implements MessageHandler {
             sensorData.setId(uuid);
             sensorData.setCreatedAt(timestamp);
 
-            sensorDataService.process(sensorData);
+            sensorDataServiceImpl.process(sensorData);
         } catch (JsonProcessingException e) {
             logger.error("Failed to process message from topic '{}': {}", topic, message.getPayload());
             throw new SensorDataParseException(
