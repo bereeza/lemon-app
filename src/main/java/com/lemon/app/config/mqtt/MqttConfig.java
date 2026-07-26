@@ -36,6 +36,8 @@ public class MqttConfig {
         MqttConnectOptions options = new MqttConnectOptions();
         options.setServerURIs(new String[]{mqttBrokerProperties.getBrokerUri()});
         options.setAutomaticReconnect(false);
+        options.setUserName(mqttBrokerProperties.getUsername());
+        options.setPassword(mqttBrokerProperties.getPassword().toCharArray());
         options.setCleanSession(true);
         factory.setConnectionOptions(options);
         return factory;

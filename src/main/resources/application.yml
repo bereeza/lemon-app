@@ -13,6 +13,8 @@ mqtt:
   topic-sensor-data: esp32/dht/sensor/data
   topic-sensor-anomalies: esp32/dht/sensor/anomalies
   client-id: ${CLIENT_ID:lemon-app-client}
+  username: ${MQTT_USERNAME:esp32-gateway}
+  password: ${MQTT_PASSWORD}
   qos: ${QOS:1}
 
 gcp:
