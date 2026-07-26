@@ -1,0 +1,26 @@
+FROM ghcr.io/graalvm/native-image-community:21-ol9 AS native-builder
+LABEL authors="bereeeza"
+
+RUN microdnf install -y tar gzip curl findutils && \
+    curl -fsSL https://archive.apache.org/dist/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz -o /tmp/maven.tar.gz && \
+    tar -xzf /tmp/maven.tar.gz -C /opt && \
+    rm /tmp/maven.tar.gz && \
+    ln -s /opt/apache-maven-3.9.9 /opt/maven
+ENV PATH="/opt/maven/bin:${PATH}"
+
+WORKDIR /build
+
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+COPY src ./src
+RUN mvn clean package -Pnative -DskipTests
+RUN ls -la /build/target
+
+FROM debian:bookworm-slim
+WORKDIR /app
+
+COPY --from=native-builder /build/target/lemon-app /app/lemon-app
+
+EXPOSE 8080
+ENTRYPOINT ["/app/lemon-app"]

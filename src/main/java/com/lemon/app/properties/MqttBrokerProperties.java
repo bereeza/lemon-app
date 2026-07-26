@@ -13,6 +13,8 @@ public class MqttBrokerProperties {
     private String clientId;
     private String topicSensorData;
     private String topicSensorAnomalies;
+    private String username;
+    private String password;
     private int qos;
 
     public MqttBrokerProperties() {
@@ -23,12 +25,16 @@ public class MqttBrokerProperties {
             String clientId,
             String topicSensorData,
             String topicSensorAnomalies,
+            String username,
+            String password,
             int qos
     ) {
         this.brokerUri = Objects.requireNonNull(brokerUri, "Broker URI cannot be null.");
         this.clientId = Objects.requireNonNull(clientId, "Client ID cannot be null.");
         this.topicSensorData = Objects.requireNonNull(topicSensorData, "Topics sensor data cannot be null.");
         this.topicSensorAnomalies = Objects.requireNonNull(topicSensorAnomalies, "Topic sensor anomalies cannot be null.");
+        this.username = Objects.requireNonNull(username, "Username cannot be null.");
+        this.password = Objects.requireNonNull(password, "Password cannot be null.");
         this.qos = qos;
     }
 
@@ -54,6 +60,22 @@ public class MqttBrokerProperties {
 
     public void setTopicSensorData(String topicSensorData) {
         this.topicSensorData = topicSensorData;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getQos() {
