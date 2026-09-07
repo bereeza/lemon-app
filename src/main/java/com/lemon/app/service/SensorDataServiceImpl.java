@@ -5,6 +5,7 @@ import com.lemon.app.handler.SlidingWindowAnomalyDetector;
 import com.lemon.app.model.SensorData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -16,6 +17,18 @@ public class SensorDataServiceImpl implements SensorDataService<SensorData> {
 
     private static final String TEMP_ANOMALY = "Temperature anomaly:";
     private static final String HUMIDITY_ANOMALY = "Humidity anomaly:";
+
+    @Value(value = "${humidity-min:0}")
+    private int HUMIDITY_MIN;
+
+    @Value(value = "${humidity-max:100}")
+    private int HUMIDITY_MAX;
+
+    @Value(value = "${temperature-c-min:-100}")
+    private int TEMPERATURE_MIN;
+
+    @Value(value = "${temperature-c-max:100}")
+    private int TEMPERATURE_MAX;
 
     private final DHT11SensorDataClient dht11SensorDataClient;
     private final SlidingWindowAnomalyDetector temperatureDetector;
@@ -41,12 +54,12 @@ public class SensorDataServiceImpl implements SensorDataService<SensorData> {
             boolean humidityAnomaly = humidityDetector.isAnomaly(data.getHumidity());
             boolean hasAnomaly = false;
 
-            if (temperatureAnomaly) {
+            if (temperatureAnomaly || data.getTemperature() < TEMPERATURE_MIN || data.getTemperature() > TEMPERATURE_MAX) {
                 data.setCauseOfAnomaly(TEMP_ANOMALY + data.getTemperature());
                 hasAnomaly = true;
             }
 
-            if (humidityAnomaly || data.getHumidity() < 0) {
+            if (humidityAnomaly || data.getHumidity() < HUMIDITY_MIN || data.getHumidity() > HUMIDITY_MAX) {
                 data.setCauseOfAnomaly(HUMIDITY_ANOMALY + data.getHumidity());
                 hasAnomaly = true;
             }
