@@ -1,12 +1,7 @@
 spring:
   application:
     name: lemon-app
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, metrics, prometheus
+    version: 1.0.0-BETA
 
 mqtt:
   broker-uri: tcp://${IP}:1883
@@ -16,6 +11,12 @@ mqtt:
   username: ${MQTT_USERNAME:esp32-gateway}
   password: ${MQTT_PASSWORD}
   qos: ${QOS:1}
+
+validation:
+  humidity-min: ${HUMIDITY_MIN:0}
+  humidity-max: ${HUMIDITY_MAX:100}
+  temperature-c-min: ${TEMPERATURE_MIN:-100}
+  temperature-c-max: ${TEMPERATURE_MAX:100}
 
 gcp:
   project-id: ${GCP_PROJECT_ID:lemon-app}
