@@ -1,0 +1,18 @@
+[Unit]
+Description=lemon-app
+After=network.target mosquitto.service
+
+[Service]
+Type=simple
+User=
+WorkingDirectory=
+Environment="BIGTABLE_EMULATOR_HOST=localhost:8086"
+Environment="IP="
+Environment="MQTT_USERNAME=esp32-gateway"
+Environment="MQTT_PASSWORD="
+ExecStartPre=
+ExecStart=
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
